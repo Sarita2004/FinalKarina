@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+    color: #333;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.qr-section {
+    flex: 3;
+    padding-right: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.qr-placeholder {
+    border: 2px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    min-height: 200px;
+}
+
+.alumnos-section {
+    flex: 1;
+    background-color: #f8f9fa;
+    border-left: 1px solid #ddd;
+    padding-left: 20px;
+    border-radius: 0 10px 10px 0;
+}
+
+.alumnos-section h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+#listado-alumnos {
+    list-style: none;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+#listado-alumnos li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    color: #555;
+}
+
+#listado-alumnos li:hover {
+    background-color: #e9ecef;
+}
+
