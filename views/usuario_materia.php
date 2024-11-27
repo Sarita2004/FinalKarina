@@ -1,7 +1,7 @@
 <?php
 
 require '../includes/conexion.php';
-// Obtener las materias de la tabla materias
+
 $query_materias = "SELECT id_materia, nombre FROM materias";
 $resultado_materias = $conn->query($query_materias);
 ?>

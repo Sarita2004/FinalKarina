@@ -1,29 +1,28 @@
 <?php
-require '../pruebaqr/barcode-master/barcode.php'; // Incluye la librería del generador de códigos QR
-session_start();
+require '../pruebaqr/barcode-master/barcode.php';
 
-// //Verifica si el profesor está autenticado
-// if (!isset($_SESSION['id']) || $_SESSION['rol'] != 'profesor') {
-//     header('Location: ../public/views/index.php');
-//     exit();
-// }
+// Verificar si se ha recibido el ID de la materia y el ID del profesor
+if (!isset($_GET['id_materia']) || !isset($_GET['id_profesor'])) {
+    echo "Error: Faltan parámetros (id_materia o id_profesor).";
+    exit();
+}
 
-$profesor_id = $_SESSION['id']; // ID del profesor desde la sesión
-$clase_id = 1; // Este es el ID de la clase, puedes obtenerlo dinámicamente dependiendo de la clase actual
+$id_materia = intval($_GET['id_materia']);
+$id_profesor = intval($_GET['id_profesor']);
 
 // Generar la URL que estará embebida en el QR
-$urlQR = "http://192.168.2.111/Asistencia/pruebaqr/asistencia_registrar.php?clase_id=" . $clase_id;
+$urlQR = "http://192.168.2.111/Asistencia/pruebaqr/asistencia_registrar.php?id_materia=" . $id_materia . "&id_profesor=" . $id_profesor;
 
-// Generar el código QR usando la biblioteca barcode generator
-$generator = new barcode_generator(); // Si usas Picqer Barcode Generator
+// Generar el código QR
+$generator = new barcode_generator(); // Usar la biblioteca del generador QR
 $qrCode = $generator->render_svg('qr', $urlQR, [
     'w' => 300,
     'h' => 300,
-    'bc' => '#00f2df', // color de fondo
+    'bc' => '#2b3e50', // color de fondo
     'cs' => '#000000', // color de los espacios
     'cm' => '#ffffff', // color de los módulos
     'ms' => 's' // s: square, r: round, x: cross
 ]);
 
-echo $qrCode; // Mostrar el código QR en la página
+echo $qrCode; // Imprimir el QR generado
 ?>

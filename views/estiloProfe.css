@@ -14,10 +14,11 @@ body {
 }
 
 .profile-section {
+    text-align: center;
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-    background: #a84646;
+    background: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,6 +35,7 @@ body {
 }
 
 .profile-info h2 {
+    
     margin: 0;
     font-size: 24px;
     color: #222;
@@ -46,7 +48,8 @@ body {
 }
 
 .courses-section {
-    width: 100%;
+    
+    width: 90%;
     max-width: 1200px;
 }
 
@@ -63,6 +66,8 @@ body {
 }
 
 .course-card {
+    width: 300px;
+    height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

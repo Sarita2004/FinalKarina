@@ -1,41 +1,73 @@
 <?php
 session_start();
-require '../includes/conexion.php'; // Incluye la conexión a la base de datos
+require_once '../includes/conexion.php';
 
-// Verifica si el usuario tiene sesión iniciada y si su rol es 'alumno'
-if (!isset($_SESSION['alumno_id']) || $_SESSION['rol'] !== 'alumno') {
-    header('Location: ../public/index.php'); // Si no es alumno, redirige al login
+
+if (!isset($_SESSION['id']) || $_SESSION['rol'] != 'alumno') {
+    header('Location: ../index.php'); 
     exit();
 }
 
+$alumno_id = $_SESSION['id']; 
 
-// Aquí puedes poner el contenido del dashboard del alumno
+
+$stmt = $conn->prepare("SELECT nombre, apellido FROM usuarios WHERE id = ?");
+$stmt->bind_param("i", $alumno_id);
+$stmt->execute();
+$alumno = $stmt->get_result()->fetch_assoc();
+
+
+$stmtMaterias = $conn->prepare("
+    SELECT m.id_materia, m.nombre AS materia_nombre
+    FROM usuario_materia um
+    JOIN materias m ON um.id_materia = m.id_materia
+    WHERE um.id_usuario = ?
+");
+$stmtMaterias->bind_param("i", $alumno_id);
+$stmtMaterias->execute();
+$materias = $stmtMaterias->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$stmt->close();
+$stmtMaterias->close();
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Alumno</title>
-    <link rel="stylesheet" href="styles2.css">
+    <link rel="stylesheet" href="estiloProfe.css"> 
 </head>
 <body>
-    <h1>Bienvenido Alumno, <?php echo $_SESSION['nombre']; ?></h1>
-    <div class="navbar">
-        <h1>Perfil del Alumno</h1>
-        <a href="index2.php">Dashboard</a>
-    </div>
+    <div class="dashboard">
+        
+        <div class="profile-section">
+            <div class="profile-picture">
+                
+            </div>
+            <div class="profile-info">
+                <h2 id="nombre-alumno">
+                    <?php echo htmlspecialchars($alumno['nombre']); ?>
+                </h2>
+                <h4 id="apellido-alumno">
+                    <?php echo htmlspecialchars($alumno['apellido']); ?>
+                </h4>
+            </div>
+        </div>
 
-    <div class="perfil-container">
-        <img src="foto-alumno.jpg" alt="Foto del Alumno" class="foto-perfil">
-        <h2>Nombre del Alumno</h2>
-        <p><strong>Email:</strong> alumno@example.com</p>
-        <p><strong>Curso:</strong> 10° Grado</p>
-        <p><strong>Promedio:</strong> 8.5</p>
-        <!-- Agregar más datos relevantes -->
+        
+        <div class="courses-section">
+            <h3>Mis Materias</h3>
+            <div class="course-list">
+                <?php foreach ($materias as $materia): ?>
+                    <a href="materia_alumno.php?id=<?php echo $materia['id_materia']; ?>" class="course-card">
+                        <h4><?php echo htmlspecialchars($materia['materia_nombre']); ?></h4>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </div>
-
-    <script src="script.js"></script>
-    <!-- Contenido del dashboard del alumno -->
 </body>
 </html>

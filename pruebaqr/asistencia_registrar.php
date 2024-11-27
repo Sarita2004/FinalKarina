@@ -5,29 +5,24 @@ require '../includes/conexion.php';
 
 // Verificar si el alumno está autenticado
 if (!isset($_SESSION['id']) || $_SESSION['rol'] != 'alumno') {
-    //header('Location: ../public/views/index.php');
-
-    exit();
+    exit("Acceso denegado. Debes iniciar sesión como alumno.");
 }
 
 // Obtener el ID del alumno desde la sesión
 $alumno_id = $_SESSION['id'];
 
-// Verificar si se ha pasado el ID de la clase en la URL
-if (isset($_GET['clase_id'])) {
-    $clase_id = $_GET['clase_id'];
+// Verificar si se han pasado los parámetros necesarios (id_materia e id_profesor)
+if (isset($_GET['id_materia']) && isset($_GET['id_profesor'])) {
+    $id_materia = intval($_GET['id_materia']);
+    $id_profesor = intval($_GET['id_profesor']);
 
-    // Obtener los detalles de la clase (profesor y materia) desde la tabla clases
-    $sqlClase = "SELECT id_profesor, id_materia FROM clases WHERE id_clase = ?";
-    $stmtClase = $pdo->prepare($sqlClase);
-    $stmtClase->execute([$clase_id]);
-    $clase = $stmtClase->fetch();
-
-    // Verificar si se encontró la clase
-    if ($clase) {
-        $id_profesor = $clase['id_profesor'];
-        $id_materia = $clase['id_materia'];
-
+    // Verificar si el profesor realmente imparte esa materia
+    $sqlValidar = "SELECT 1 FROM usuario_materia 
+                   WHERE id_usuario = ? AND id_materia = ?";
+    $stmtValidar = $pdo->prepare($sqlValidar);
+    $stmtValidar->execute([$id_profesor, $id_materia]);
+    
+    if ($stmtValidar->rowCount() > 0) {
         // Registrar la asistencia en la tabla 'asistencias'
         $sqlAsistencia = "INSERT INTO asistencias (id_alumno, id_profesor, id_materia, fecha) 
                           VALUES (?, ?, ?, NOW())";
@@ -36,9 +31,9 @@ if (isset($_GET['clase_id'])) {
 
         echo "Asistencia registrada correctamente.";
     } else {
-        echo "Clase no encontrada o código QR inválido.";
+        echo "Error: El profesor no imparte la materia especificada.";
     }
 } else {
-    echo "No se proporcionó información de la clase.";
+    echo "Error: Faltan parámetros (id_materia o id_profesor).";
 }
 ?>

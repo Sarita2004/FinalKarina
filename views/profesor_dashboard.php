@@ -1,14 +1,14 @@
 <?php
 session_start();
-require '../includes/conexion.php'; // Asegúrate de que este archivo contiene la conexión a tu base de datos
+require_once '../includes/conexion.php';
 
 // Verificar si el usuario ha iniciado sesión y es profesor
 if (!isset($_SESSION['id']) || $_SESSION['rol'] != 'profesor') {
-    header('Location: ../index.php'); // Redirige al login si no es profesor o no está logueado
+    header('Location: ../index.php'); 
     exit();
 }
 
-$profesor_id = $_SESSION['id']; // ID del profesor guardado en la sesión
+$profesor_id = $_SESSION['id']; 
 
 // Obtener los datos del profesor
 $stmt = $conn->prepare("SELECT nombre, apellido FROM usuarios WHERE id = ?");
@@ -16,11 +16,12 @@ $stmt->bind_param("i", $profesor_id);
 $stmt->execute();
 $profesor = $stmt->get_result()->fetch_assoc();
 
-// Obtener solo los nombres de las materias que dicta el profesor
+// Obtener las materias del profesor desde la tabla intermedia
 $stmtMaterias = $conn->prepare("
-    SELECT nombre AS materia_nombre 
-    FROM materias 
-    WHERE id_profesor = ?
+    SELECT m.id_materia, m.nombre AS materia_nombre
+    FROM usuario_materia um
+    JOIN materias m ON um.id_materia = m.id_materia
+    WHERE um.id_usuario = ?
 ");
 $stmtMaterias->bind_param("i", $profesor_id);
 $stmtMaterias->execute();
@@ -31,21 +32,20 @@ $stmtMaterias->close();
 $conn->close();
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Profesor</title>
-    <link rel="stylesheet" href="stylesprof.css"> <!-- Asegúrate de tener el archivo de estilos -->
+    <link rel="stylesheet" href="estiloProfe.css"> 
 </head>
 <body>
     <div class="dashboard">
-        <!-- Sección del perfil del profesor -->
+        <!-- Perfil del profesor -->
         <div class="profile-section">
             <div class="profile-picture">
-                <img src="ruta_foto.jpg" alt="Foto del profesor"> <!-- Cambiar esto para que sea dinámico si tienes fotos -->
+                
             </div>
             <div class="profile-info">
                 <h2 id="nombre-profesor">
@@ -57,14 +57,14 @@ $conn->close();
             </div>
         </div>
 
-        <!-- Sección de materias -->
+        <!-- Materias -->
         <div class="courses-section">
             <h3>Materias</h3>
             <div class="course-list">
                 <?php foreach ($materias as $materia): ?>
-                    <div class="course-card">
+                    <a href="materia_detalle.php?id=<?php echo $materia['id_materia']; ?>" class="course-card">
                         <h4><?php echo htmlspecialchars($materia['materia_nombre']); ?></h4>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             </div>
         </div>

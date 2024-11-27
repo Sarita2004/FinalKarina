@@ -2,27 +2,29 @@
 session_start();
 require '../includes/conexion.php';
 
+// Verificar si el alumno está autenticado
 if (!isset($_SESSION['id']) || $_SESSION['rol'] != 'alumno') {
+    header('Location: ../index.php');
     exit();
 }
 
+// Obtener el ID del alumno desde la sesión
 $alumno_id = $_SESSION['id'];
 
-if (isset($_GET['clase_id'])) {
-    $clase_id = $_GET['clase_id'];
+// Verificar si se pasaron los parámetros necesarios
+if (isset($_GET['id_materia']) && isset($_GET['id_profesor'])) {
+    $id_materia = intval($_GET['id_materia']);
+    $id_profesor = intval($_GET['id_profesor']);
 
-    $sqlClase = "SELECT id_profesor, id_materia FROM clases WHERE id_clase = ?";
-    $stmtClase = $pdo->prepare($sqlClase);
-    $stmtClase->execute([$clase_id]);
-    $clase = $stmtClase->fetch();
+    // Registrar la asistencia
+    $sqlAsistencia = "INSERT INTO asistencias (id_alumno, id_profesor, id_materia, fecha) 
+                      VALUES (?, ?, ?, NOW())";
+    $stmtAsistencia = $pdo->prepare($sqlAsistencia);
+    $stmtAsistencia->execute([$alumno_id, $id_profesor, $id_materia]);
 
-    if ($clase) {
-        $asistencia = new Asistencia($pdo, $alumno_id, $clase['id_profesor'], $clase['id_materia']);
-        echo $asistencia->registrar();
-    } else {
-        echo "Clase no encontrada o código QR inválido.";
-    }
+    echo "Asistencia registrada correctamente.";
 } else {
-    echo "No se proporcionó información de la clase.";
+    echo "Parámetros inválidos.";
 }
 ?>
+

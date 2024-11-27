@@ -1,0 +1,153 @@
+/* General Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f3f4f7, #dce1eb);
+    color: #333;
+}
+
+/* Títulos */
+h1 {
+    font-size: 2.2rem;
+    text-align: center;
+    color: #3c338b;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Enlaces */
+a {
+    color: #4c42a5;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #3c338b;
+    text-decoration: underline;
+}
+
+/* Contenedores */
+.login-container, .register-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: scaleIn 0.5s ease-in-out;
+}
+
+.login-container:hover, .register-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    text-transform: capitalize;
+}
+
+input, select {
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    background: #f8f9fa;
+}
+
+input:focus, select:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 8px rgba(26, 115, 232, 0.5);
+}
+
+/* Botones */
+button {
+    padding: 12px 20px;
+    background: linear-gradient(90deg, #235aa1, #3c338b);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #135cb5, #0d47a1);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+    background: #0a367f;
+}
+
+/* Links bajo el formulario */
+p {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+p a {
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .login-container, .register-container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    input, select, button {
+        font-size: 0.9rem;
+    }
+}
