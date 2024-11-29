@@ -3,38 +3,43 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #dbd8d8;
+    background: linear-gradient(135deg, #f3f4f7, #dce1eb);
     color: #333;
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden; /* Oculta las barras de desplazamiento */
 }
 
 /* Navbar */
 .navbar {
-    font-family: 'Roboto', sans-serif;
-    width: 100%;
-    background: linear-gradient(135deg, #032c38, #2b3e50);
+    width: 97%;
+    background: linear-gradient(90deg, #637181, #304458);
     color: #ffffff;
     padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    z-index: 10;
+    flex-shrink: 0; /* Evita que el navbar cambie de tamaño */
 }
 
 .navbar .home-link {
     color: white;
     text-decoration: none;
     font-size: 18px;
-    margin-right: auto; /* Alinea el enlace al lado izquierdo */
+    font-weight: bold;
+    transition: color 0.2s ease;
 }
 
 .navbar .home-link:hover {
-    text-decoration: underline;
+    color: #cfd8e3;
 }
 
 .navbar h1 {
     margin: 0;
-    font-size: 2em;
+    font-size: 1.8em;
 }
 
 /* Contenedor principal */
@@ -42,23 +47,25 @@ body {
     display: flex;
     flex: 1;
     width: 100%;
+    height: calc(100vh - 60px); /* Ajuste dinámico para restar la altura del navbar */
+    overflow: hidden; /* Evita que el contenedor muestre barras de desplazamiento */
 }
 
-/* Barra lateral */
+/* Barra lateral izquierda */
 .sidebar {
-    width: 35%; /* Incrementar el ancho */
+    width: 20%; /* Reducido de 30% */
     background: linear-gradient(135deg, #2b3e50, #39556e);
     color: #ffffff;
     padding: 20px;
     display: flex;
     flex-direction: column;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Permite desplazar solo si hay demasiado contenido */
 }
 
 .sidebar h3 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    color: #ffffff;
+    font-size: 1.6em;
+    margin-bottom: 15px;
 }
 
 .sidebar ul {
@@ -68,16 +75,35 @@ body {
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
-    font-size: 1em;
-    background: rgba(255, 255, 255, 0.15);
+    margin-bottom: 10px;
     padding: 10px;
-    border-radius: 5px;
-    transition: background 0.2s;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 0.2s ease;
+    font-size: 1em;
 }
 
 .sidebar ul li:hover {
     background: rgba(255, 255, 255, 0.25);
+}
+
+/* Botón Generar QR */
+.generate-qr-btn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #4caf50;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.generate-qr-btn:hover {
+    background-color: #45a049;
 }
 
 /* Contenido principal */
@@ -88,76 +114,107 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centrar el contenido */
+    justify-content: center;
+    overflow: hidden; /* Evita desplazamientos en el contenido principal */
 }
 
-.main-content h1 {
-    font-size: 2.5em;
-    color: #222;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* Cards */
-.cards {
-    display: flex;
-    justify-content: center; /* Centrar las tarjetas */
-    gap: 20px;
-}
-
+/* Tarjetas */
 .card {
-    width: 300px; /* Fijar el tamaño de la tarjeta */
-    background: #2b3e50;
-    color: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    color: #333;
     text-align: center;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-    text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
-    overflow: hidden;
+    animation: fadeIn 0.5s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    background: #103863;
 }
 
-.card h2 {
-    font-size: 1.8em;
+/* Contenedor del QR */
+.qr-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.qr-container p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Barra lateral derecha (fechas de clases) */
+.date-bar {
+    width: 20%;
+    background: linear-gradient(135deg, #2b3e50, #3c6478);
+    color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Permite desplazamiento si es necesario */
+}
+
+.date-bar h3 {
+    font-size: 1.6em;
+    margin-bottom: 15px;
+}
+
+.date-bar ul {
+    list-style: none;
+    padding: 0;
     margin: 0;
 }
 
-.card::after {
-    content: '';
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 150px;
-    height: 150px;
+.date-bar ul li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
     background: rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    z-index: 0;
+    transition: background 0.2s ease;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.date-bar ul li:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .sidebar {
+    .sidebar, .date-bar {
         width: 100%;
         text-align: center;
+    }
+
+    .container {
+        flex-direction: column;
     }
 
     .main-content {
         padding: 20px;
     }
 
-    .cards {
-        flex-direction: column;
-    }
-
     .card {
-        width: 100%; /* Ajustar el tamaño en pantallas pequeñas */
+        width: 90%;
     }
 }

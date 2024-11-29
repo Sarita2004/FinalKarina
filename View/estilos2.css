@@ -1,0 +1,80 @@
+/* Estilo para el contenedor principal */
+.container {
+    margin-top: 2rem;
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Títulos */
+h2 {
+    color: #2b3e50;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Tarjeta para los datos personales */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    margin-bottom: 2rem;
+}
+
+/* Cuerpo de la tarjeta */
+.card-body {
+    padding: 20px;
+}
+
+/* Estilo para cada campo de datos */
+.card-body p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+/* Estilo para los campos destacados */
+.card-body strong {
+    color: #20b2aa; /* Verde turquesa */
+}
+
+/* Botón para regresar con efecto hover */
+.btn {
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-weight: bold;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #2b3e50; /* Verde turquesa */
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Fondo de página */
+body {
+    background-color: #f3f4f6;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Sombra suave para el contenedor */
+.container {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Transiciones suaves para la carga de contenido */
+.container {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

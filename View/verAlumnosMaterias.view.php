@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumnos de <?= $AlumnosXmateria->nombre; ?></title>    <!-- Include bootstrap last version -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include jQuery last version -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Include fontawesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    <link rel="stylesheet" href="../View/estilos.css">
+
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Materias</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../View/Presentacion.php">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../Controllers/indexProfesor.php">Profesores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../Controllers/indexAlumno.php">Alumnos</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="mb-4">Alumnos de <?= $AlumnosXmateria->nombre; ?></h1>
+        <div class="list-group">
+            <?php foreach ($AlumnosXmateria->alumnos() as $Alumno) { ?>
+                <div class="list-group-item">
+                    <h5 class="mb-1"><?= $Alumno->nombre; ?> <?= $Alumno->apellido; ?></h5>
+                    <a href="../Controllers/desasignarMateriasAlumno.php?id_alumno=<?= $Alumno->id_alumno; ?>&id_materia=<?= $AlumnosXmateria->id_materia; ?>"  class="btn btn-danger btn-sm">
+                    <i class="fas fa-user-minus"></i> Eliminar</a>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+
+</body>
+
+</html>

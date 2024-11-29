@@ -44,6 +44,18 @@ $asistenciasAlumno = $resultadoPorcentaje['asistencias_alumno'];
 $totalClases = $resultadoPorcentaje['total_clases'];
 $porcentajeAsistencia = ($totalClases > 0) ? ($asistenciasAlumno / $totalClases) * 100 : 0;
 
+// Obtener las fechas de las clases asistidas por el alumno
+$stmtFechasAsistidas = $conn->prepare("
+    SELECT DISTINCT DATE(fecha) AS fecha_clase
+    FROM asistencias
+    WHERE id_alumno = ? AND id_materia = ?
+    ORDER BY fecha_clase DESC
+");
+$stmtFechasAsistidas->bind_param("ii", $alumno_id, $materia_id);
+$stmtFechasAsistidas->execute();
+$fechasAsistidas = $stmtFechasAsistidas->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmtFechasAsistidas->close();
+
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -52,7 +64,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle Materia</title>
-    <link rel="stylesheet" href="estilosMateria.css">
+    <link rel="stylesheet" href="estilomateria.css">
 </head>
 <body>
     <!-- Navbar -->
@@ -62,14 +74,26 @@ $conn->close();
     </div>
 
     <div class="container">
-
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+            <h3>Clases Asistidas</h3>
+            <ul>
+                <?php if (!empty($fechasAsistidas)): ?>
+                    <?php foreach ($fechasAsistidas as $fecha): ?>
+                        <li><?php echo date('d/m/Y', strtotime($fecha['fecha_clase'])); ?></li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li>No has asistido a ninguna clase en esta materia.</li>
+                <?php endif; ?>
+            </ul>
+        </aside>
 
         <!-- Contenido principal -->
         <main class="main-content">
             <div class="card">
                 <h3>Porcentaje de Asistencia</h3>
                 <p>
-                    <?php echo number_format($porcentajeAsistencia, 2); ?>% <!-- Formato a dos decimales -->
+                    <?php echo number_format($porcentajeAsistencia, 2); ?>%
                 </p>
                 <p>Total de clases: <?php echo $totalClases; ?></p>
                 <p>Clases asistidas: <?php echo $asistenciasAlumno; ?></p>

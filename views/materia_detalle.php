@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once '../includes/conexion.php';
-require '../pruebaqr/barcode-master/barcode.php'; // Librería para generar QR
 
 // Verificar si el usuario ha iniciado sesión y es profesor
 if (!isset($_SESSION['id']) || $_SESSION['rol'] != 'profesor') {
@@ -29,36 +28,20 @@ if (!$materia) {
     exit();
 }
 
-// Obtener los alumnos asignados a la materia
-$stmtAlumnos = $conn->prepare("
-    SELECT u.nombre, u.apellido
-    FROM usuarios u
-    INNER JOIN usuario_materia um ON u.id = um.id_usuario
-    WHERE um.id_materia = ? AND u.rol = 'alumno'
+// Obtener las fechas distintas de las clases de la materia
+$stmtFechas = $conn->prepare("
+    SELECT DISTINCT DATE(fecha) AS fecha_clase
+    FROM asistencias
+    WHERE id_materia = ? 
+    ORDER BY fecha_clase DESC
 ");
-$stmtAlumnos->bind_param("i", $materia_id);
-$stmtAlumnos->execute();
-$alumnos = $stmtAlumnos->get_result()->fetch_all(MYSQLI_ASSOC);
-$stmtAlumnos->close();
-
-// Generar QR
-$profesor_id = $_SESSION['id']; // ID del profesor desde la sesión
-$urlQR = "http://192.168.1.16/Asistencia/pruebaqr/asistencia_registrar.php?id_materia={$materia_id}&id_profesor={$profesor_id}";
-
-// Crear el QR en SVG
-$generator = new barcode_generator();
-$qrCode = $generator->render_svg('qr', $urlQR, [
-    'w' => 300,
-    'h' => 300,
-    'bc' => '#637181', // color de fondo
-    'cs' => '#000000', // color de los espacios
-    'cm' => '#ffffff', // color de los módulos
-    'ms' => 's' // s: square, r: round, x: cross
-]);
+$stmtFechas->bind_param("i", $materia_id);
+$stmtFechas->execute();
+$fechas = $stmtFechas->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmtFechas->close();
 
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -67,6 +50,17 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle Materia</title>
     <link rel="stylesheet" href="estilosMateria.css">
+    <script>
+        async function generarQR() {
+            const response = await fetch(`generar_qr.php?id_materia=<?php echo $materia_id; ?>`);
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('qrCode').innerHTML = data.qr;
+            } else {
+                alert('Error al generar el código QR.');
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Navbar -->
@@ -78,14 +72,18 @@ $conn->close();
     <div class="container">
         <!-- Barra lateral -->
         <aside class="sidebar">
-            <h3>Alumnos Asignados</h3>
+            <h3>Fechas de Clases</h3>
             <ul>
-                <?php if (!empty($alumnos)): ?>
-                    <?php foreach ($alumnos as $alumno): ?>
-                        <li><?php echo htmlspecialchars($alumno['nombre'] . ' ' . $alumno['apellido']); ?></li>
+                <?php if (!empty($fechas)): ?>
+                    <?php foreach ($fechas as $fecha): ?>
+                        <li>
+                            <a href="detalle_clase.php?fecha=<?php echo $fecha['fecha_clase']; ?>&materia_id=<?php echo $materia_id; ?>">
+                                <?php echo date('d/m/Y', strtotime($fecha['fecha_clase'])); ?>
+                            </a>
+                        </li>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <li>No hay alumnos asignados a esta materia.</li>
+                    <li>No hay clases registradas para esta materia.</li>
                 <?php endif; ?>
             </ul>
         </aside>
@@ -95,13 +93,12 @@ $conn->close();
             <div class="card">
                 <h3>Código QR de la materia</h3>
                 <div class="qr-container">
-                    <p>Escanea este código para registrar la asistencia:</p>
-                    <div><?php echo $qrCode; ?></div>
+                    <p>Presiona el botón para generar un código QR:</p>
+                    <button onclick="generarQR()">Generar QR</button>
+                    <div id="qrCode"></div>
                 </div>
             </div>
         </main>
     </div>
 </body>
 </html>
-
-
