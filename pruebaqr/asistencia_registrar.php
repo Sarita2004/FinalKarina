@@ -5,11 +5,23 @@ require '../includes/conexion.php';
 
 // Verificar si el alumno está autenticado
 if (!isset($_SESSION['id']) || $_SESSION['rol'] != 'alumno') {
-    exit("Acceso denegado. Debes iniciar sesión como alumno.");
+    echo "<script>
+        Swal.fire({
+            title: 'Acceso denegado',
+            text: 'Debes iniciar sesión como alumno.',
+            icon: 'error',
+            confirmButtonText: 'Entendido'
+        }).then(() => {
+            window.location.href = '../login.php'; // Redirigir al inicio de sesión
+        });
+    </script>";
+    exit;
 }
 
 // Obtener el ID del alumno desde la sesión
 $alumno_id = $_SESSION['id'];
+
+$message = ''; // Variable para almacenar mensajes
 
 // Verificar si se han pasado los parámetros necesarios (id_materia e id_profesor)
 if (isset($_GET['id_materia']) && isset($_GET['id_profesor'])) {
@@ -29,11 +41,50 @@ if (isset($_GET['id_materia']) && isset($_GET['id_profesor'])) {
         $stmtAsistencia = $pdo->prepare($sqlAsistencia);
         $stmtAsistencia->execute([$alumno_id, $id_profesor, $id_materia]);
 
-        echo "Asistencia registrada correctamente.";
+        $message = [
+            'title' => 'Asistencia registrada',
+            'text' => 'La asistencia se registró correctamente.',
+            'icon' => 'success'
+        ];
     } else {
-        echo "Error: El profesor no imparte la materia especificada.";
+        $message = [
+            'title' => 'Error',
+            'text' => 'El profesor no imparte la materia especificada.',
+            'icon' => 'error'
+        ];
     }
 } else {
-    echo "Error: Faltan parámetros (id_materia o id_profesor).";
+    $message = [
+        'title' => 'Error',
+        'text' => 'Faltan parámetros (id_materia o id_profesor).',
+        'icon' => 'error'
+    ];
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistencia</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<script>
+    // Configuración del mensaje generado por PHP
+    const message = <?php echo json_encode($message); ?>;
+    Swal.fire({
+        title: message.title,
+        text: message.text,
+        icon: message.icon,
+        confirmButtonText: 'Aceptar'
+    }).then(() => {
+        // Opcional: Redirigir después de mostrar el mensaje
+        <?php if ($message['icon'] === 'success') { ?>
+            window.location.href = '../alumno_dashboard.php'; // Redirigir al dashboard del alumno
+        <?php } ?>
+    });
+</script>
+</body>
+</html>

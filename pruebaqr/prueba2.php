@@ -11,7 +11,7 @@ $id_materia = intval($_GET['id_materia']);
 $id_profesor = intval($_GET['id_profesor']);
 
 // Generar la URL que estará embebida en el QR
-$urlQR = "http://192.168.2.111/Asistencia/pruebaqr/asistencia_registrar.php?id_materia=" . $id_materia . "&id_profesor=" . $id_profesor;
+$urlQR = "http://192.168.1.17/Asistencia/pruebaqr/asistencia_registrar.php?id_materia=" . $id_materia . "&id_profesor=" . $id_profesor;
 
 // Generar el código QR
 $generator = new barcode_generator(); // Usar la biblioteca del generador QR

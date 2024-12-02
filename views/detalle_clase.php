@@ -68,7 +68,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asistencias - <?php echo htmlspecialchars($materia['nombre']); ?></title>
-    <link rel="stylesheet" href="estilosClase.css">
+    <link rel="stylesheet" href="estiloclase.css">
 </head>
 <body>
     <!-- Navbar -->

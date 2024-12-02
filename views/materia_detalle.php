@@ -49,7 +49,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle Materia</title>
-    <link rel="stylesheet" href="estilosMateria.css">
+    <link rel="stylesheet" href="estiloM.css">
     <script>
         async function generarQR() {
             const response = await fetch(`generar_qr.php?id_materia=<?php echo $materia_id; ?>`);
@@ -94,11 +94,20 @@ $conn->close();
                 <h3>Código QR de la materia</h3>
                 <div class="qr-container">
                     <p>Presiona el botón para generar un código QR:</p>
-                    <button onclick="generarQR()">Generar QR</button>
+                    <button onclick="generarQR()"class="btn-assign-notes">Generar QR</button>
                     <div id="qrCode"></div>
                 </div>
             </div>
+
+            <!-- Botón para asignar notas -->
+            <div class="card">
+                <h3>Notas</h3>
+                <p>Asigna notas a los alumnos<br></br></p>
+                
+                <a href="asignar_notas.php?id=<?php echo $materia_id; ?>" class="btn-assign-notes">Asignar Notas</a>
+            </div>
         </main>
     </div>
+    
 </body>
 </html>

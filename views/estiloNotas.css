@@ -1,0 +1,117 @@
+/* General */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #f3f4f7, #dce1eb);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Título */
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2em;
+    color: #527392;
+}
+
+/* Formulario */
+form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+thead th {
+    background: linear-gradient(135deg, #527392, #6490b6);
+    color: #ffffff;
+    padding: 10px;
+    font-size: 1.1em;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+}
+
+tbody td {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    font-size: 1em;
+    color: #333;
+}
+
+tbody tr:nth-child(odd) {
+    background: #f9f9f9;
+}
+
+tbody tr:hover {
+    background: #f1f7ff;
+}
+
+/* Inputs */
+input[type="number"] {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #333;
+}
+
+input[type="number"]:focus {
+    border-color: #6490b6;
+    outline: none;
+    box-shadow: 0 0 5px rgba(100, 144, 182, 0.5);
+}
+
+/* Botón */
+button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #527392;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: #6490b6;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    form {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+
+    button {
+        font-size: 1em;
+    }
+}

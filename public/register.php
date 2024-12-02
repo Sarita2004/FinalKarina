@@ -10,13 +10,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Definir la tabla a la cual se insertarán los datos dependiendo del rol
     $sql = "INSERT INTO usuarios (nombre, apellido, email, password, rol) VALUES (?, ?, ?, ?, ?)";
-
     $stmt = $pdo->prepare($sql);
 
     if ($stmt->execute([$nombre, $apellido, $email, $password, $rol])) {
-        echo "Usuario registrado con éxito.";
-        header('Location: index.php'); // Redirige al login tras el registro exitoso
-        exit;
+        // Si el registro es exitoso, mostramos una notificación
+        echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Usuario creado con éxito',
+                    text: '¡Ahora puedes iniciar sesión!',
+                    confirmButtonText: 'Iniciar sesión'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = 'index.php'; // Redirige al login
+                    }
+                });
+              </script>";
     } else {
         echo "Error al registrar el usuario.";
     }
@@ -30,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
     <link rel="stylesheet" href="css/estiloGeneral.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="register-container">

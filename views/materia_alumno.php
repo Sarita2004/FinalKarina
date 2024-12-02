@@ -56,6 +56,17 @@ $stmtFechasAsistidas->execute();
 $fechasAsistidas = $stmtFechasAsistidas->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmtFechasAsistidas->close();
 
+// Obtener las notas del alumno
+$stmtNotas = $conn->prepare("
+    SELECT nota_parcial_1, nota_parcial_2, nota_final
+    FROM notas
+    WHERE id_alumno = ? AND id_materia = ?
+");
+$stmtNotas->bind_param("ii", $alumno_id, $materia_id);
+$stmtNotas->execute();
+$notas = $stmtNotas->get_result()->fetch_assoc();
+$stmtNotas->close();
+
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -64,7 +75,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle Materia</title>
-    <link rel="stylesheet" href="estilomateria.css">
+    <link rel="stylesheet" href="estiloA.css">
 </head>
 <body>
     <!-- Navbar -->
@@ -97,6 +108,25 @@ $conn->close();
                 </p>
                 <p>Total de clases: <?php echo $totalClases; ?></p>
                 <p>Clases asistidas: <?php echo $asistenciasAlumno; ?></p>
+            </div>
+
+            <!-- Tarjeta para mostrar las notas -->
+            <div class="card">
+                <h3>Notas del Alumno</h3>
+                <table>
+                    <tr>
+                        <td>Primer Parcial:</td>
+                        <td><?php echo $notas['nota_parcial_1'] ? number_format($notas['nota_parcial_1'], 2) : 'No asignada'; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Segundo Parcial:</td>
+                        <td><?php echo $notas['nota_parcial_2'] ? number_format($notas['nota_parcial_2'], 2) : 'No asignada'; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Nota Final:</td>
+                        <td><?php echo $notas['nota_final'] ? number_format($notas['nota_final'], 2) : 'No asignada'; ?></td>
+                    </tr>
+                </table>
             </div>
         </main>
     </div>

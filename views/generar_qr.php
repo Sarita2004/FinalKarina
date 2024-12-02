@@ -21,7 +21,7 @@ if (!$materia_id) {
 // Generar URL única para el QR
 $profesor_id = $_SESSION['id'];
 $timestamp = time();
-$urlQR = "http://192.168.1.16/Asistencia/pruebaqr/asistencia_registrar.php?id_materia={$materia_id}&id_profesor={$profesor_id}&timestamp={$timestamp}";
+$urlQR = "http://192.168.1.17/Asistencia/pruebaqr/asistencia_registrar.php?id_materia={$materia_id}&id_profesor={$profesor_id}&timestamp={$timestamp}";
 
 // Crear el QR en SVG
 $generator = new barcode_generator();

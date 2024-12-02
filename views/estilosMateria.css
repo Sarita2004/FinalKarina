@@ -54,7 +54,7 @@ body {
 /* Barra lateral izquierda */
 .sidebar {
     width: 20%; /* Reducido de 30% */
-    background: linear-gradient(135deg, #2b3e50, #39556e);
+    background: linear-gradient(135deg, #5384b3, #4f7aa0);
     color: #ffffff;
     padding: 20px;
     display: flex;
